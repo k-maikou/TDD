@@ -8,7 +8,7 @@ class CategorySelect extends Component {
     super(props)
     console.log(props)
     this.state = {
-      selectedCategoryId: null
+      selectedCategoryId: props.selectCategory && props.selectCategory.id
     }
   }
 
@@ -17,13 +17,14 @@ class CategorySelect extends Component {
       selectedCategoryId: categoryItem.id
     })
     this.props.onSelectCategory(categoryItem)
+
     e.preventDefault();
   }
 
   render() {
     const { category } = this.props;
     const { selectedCategoryId } = this.state;
-    console.log(selectedCategoryId)
+
     return (
       <div className='category-select-component'>
         <div className='row text-center'>
@@ -36,7 +37,7 @@ class CategorySelect extends Component {
               'category-item col-3'
               return(
                 <div 
-                  className={activeClassName} 
+                  className={activeClassName}
                   key={index}
                   onClick={(e) => { this.selectCategory(e, item) }}
                 >
@@ -47,6 +48,7 @@ class CategorySelect extends Component {
                     style={{background: backColor, padding: '5px'}}
                     icon={item.iconName}
                   />
+                  <p>{ item.name }</p>
                 </div>
               )
             })

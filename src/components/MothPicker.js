@@ -25,7 +25,6 @@ class MothPicker extends Component {
     if (this.ym.contains(e.target)) {
       return;
     }
-    console.log(this.ym)
     this.setState({
       isHidden: false
     })

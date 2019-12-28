@@ -5,7 +5,7 @@ import ViewTab from '../components/ViewTab';
 import MothPicker from '../components/MothPicker';
 import CreateBtn from '../components/CreateBtn';
 import TotalPrice from '../components/TotalPrice';
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';  
 import { Tabes, Tab } from '../components/Tabes';
 import { LIST_VIEW, TYPE_OUTCOME, parseToYearAndMonth, CHART_VIEW, padLeft } from '../utility';
 import withContext from '../WithContext';
@@ -94,27 +94,19 @@ class Home extends PureComponent {
     this.props.history.push('/create')
   }
 
-  deleteItem = (deleted) => {
-    const filteredItem = this.state.items.filter(item => item.id !== deleted.id);
-    console.log(filteredItem)
-    this.setState({
-      items: filteredItem
-    })
+  deleteItem = (item) => {
+    this.props.actions.deletesItem(item);
   }
 
   render() {
-    const { data, action } = this.props;
-    console.log(action)
-    const { items, currentDate, tabView } = this.state;
-    const itemsWithCategory = items.map(item => {
-      item.category = category[item.cid];
-      return item;
-    }).filter(item => {
-      return item.date.includes(`${currentDate.year}-${padLeft(currentDate.month)}`)
+    const { data } = this.props
+    const { items, categories } = data
+    const { tabView, currentDate } = this.state
+    const itemsWithCategory = Object.keys(items).map(id => {
+      items[id].category = categories[items[id].cid]
+      return items[id]
     })
-    console.log(itemsWithCategory)
-
-    let totalIncome = 0, totalOutcome = 0;
+    let totalIncome = 0, totalOutcome = 0
     itemsWithCategory.forEach(item => {
       if (item.category.type === TYPE_OUTCOME) {
         totalOutcome += item.price
@@ -122,7 +114,7 @@ class Home extends PureComponent {
         totalIncome += item.price
       }
     })
-
+    
     return(
       <Fragment >
         <div className='row ml-0' style={{width: '100%', padding: '20px', background: 'skyBlue'}}>
@@ -164,19 +156,23 @@ class Home extends PureComponent {
               图标模式
             </Tab>
           </Tabes>
-          { tabView === LIST_VIEW &&
+          <CreateBtn onClick={ this.createItem }/>
+          { tabView === LIST_VIEW && itemsWithCategory.length > 0 &&
             <PriceList
               items={itemsWithCategory}
               onModifyItem={this.modifyItem}
               onDeleteItem={this.deleteItem}
             />
           }
+          { tabView === LIST_VIEW && itemsWithCategory.length === 0 &&
+              <div className="alert alert-light text-center no-record">
+                您还没有任何记账记录
+              </div>
+            }
           { tabView === CHART_VIEW &&
             <h1>这里是图表区域</h1>
           }
-          <CreateBtn 
-            onClick={ this.createItem }
-          />
+          
         </div>
       </Fragment>
     )

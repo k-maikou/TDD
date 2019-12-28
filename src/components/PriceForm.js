@@ -1,39 +1,33 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { isValidDate } from 'h:/前端资料/money-book/src/utility';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { isValidDate } from '../utility'
 
-class PriceForm extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      validatePass: true,
-      errorMessage: ''
-    }
-  }
-
+class PriceForm extends React.Component {
   static propTypes = {
     onFormSubmit: PropTypes.func.isRequired,
-    onCancelSubmit: PropTypes.func.isRequired,
-    item: PropTypes.object
+    onCancelSubmit: PropTypes.func.isRequired
   }
-
+  
   static defaultProps = {
     item: {}
   }
+  state = {
+    validatePass: true,
+    errorMessage: '',
+  }
+  sumbitForm = (event) => {
 
-  submitForm = (e) => {
-    const { item, onFormSubmit } = this.props;
-    const editMode = !!item.id;
-    const title = this.title.value.trim();  
-    const price = this.priceInput.value.trim() * 1;
-    const date = this.date.value.trim();
-    if (price && title && date) {
+    const { item, onFormSubmit } = this.props
+    const editMode = !!item.id
+    const price = this.priceInput.value.trim() * 1
+    const date = this.dateInput.value.trim()
+    const title = this.titleInput.value.trim()
+    if (price && date && title) {
       if (price < 0) {
         this.setState({
           validatePass: false,
           errorMessage: '价格数字必须大于0'
-        })
+        })     
       } else if (!isValidDate(date)) {
         this.setState({
           validatePass: false,
@@ -45,9 +39,9 @@ class PriceForm extends Component {
           errorMessage: ''
         })
         if (editMode) {
-          onFormSubmit({...item, title, price, date}, editMode)
+          onFormSubmit({ ...item, title, price, date }, editMode)
         } else {
-          onFormSubmit({title, price, date}, editMode)
+          onFormSubmit({ title, price, date }, editMode)
         }
       }
     } else {
@@ -56,61 +50,51 @@ class PriceForm extends Component {
         errorMessage: '请输入所有必选项'
       })
     }
-    e.preventDefault()
+    event.preventDefault()
   }
 
   render() {
     const { title, price, date } = this.props.item;
-    
+    console.log(this.props.item.id)
     return (
-      <form className='w-50 p-4 m-auto border-aqua' onSubmit={(e) => this.submitForm(e)}>
-        <div class="form-group row">
-          <label for="title" class="col-sm-2 col-form-label">标题：</label>
-          <div class="col-sm-10">
-            <input 
-              type="text"
-              class="form-control"
-              id="title"
-              placeholder='请输入标题'
-              defaultValue={title}
-              ref={(title) => this.title = title}
-            />
-          </div>
+      <form onSubmit={(event) => {this.sumbitForm(event)}} noValidate>
+        <div className="form-group">
+          <label htmlFor="title">标题 *</label>
+          <input 
+            type="text" className="form-control" 
+            id="title" placeholder="请输入标题"
+            defaultValue={title}
+            ref={(input) => {this.titleInput = input}}
+          />
         </div>
-        <div class="form-group row">
-          <label for="price" class="col-sm-2 col-form-label">价格：</label>
-          <div class="col-sm-10">
+        <div className="form-group">
+          <label htmlFor="price">价格 *</label>
+          <div className="input-group">
+            <div className="input-group-prepend">
+              <span className="input-group-text">¥</span>
+            </div>
             <input 
-              type="number"
-              class="form-control"
-              id="price"
-              placeholder='请输入价格'
+              type="number" 
+              className="form-control" 
               defaultValue={price}
-              ref={(price) => this.priceInput = price}
+              id="price" placeholder="请输入价格" 
+              ref={(input) => {this.priceInput = input}}  
             />
           </div>
         </div>
-        <div class="form-group row">
-          <label for="date" class="col-sm-2 col-form-label">日期：</label>
-          <div class="col-sm-10">
-            <input 
-              type="date"
-              class="form-control"
-              id="date"
-              defaultValue={date}
-              ref={(date) => this.date = date}
-            />
-          </div>
+        <div className="form-group">
+          <label htmlFor="date">日期 *</label>
+          <input 
+            type="date" className="form-control" 
+            id="date" placeholder="请输入日期"
+            defaultValue={date}
+            ref={(input) => {this.dateInput = input}}  
+          />
         </div>
-        <fieldset class="form-group">
-        </fieldset>
-        <div class="form-group row">
-          <button type="submit" class="btn btn-primary mr-4">提交</button>
-          <button type="submit" class="btn btn-secondary" onClick={this.props.onCancelSubmit}>取消</button>
-        </div>
-        {
-          !this.state.validatePass &&
-          <div className='alert alert-danger mt-5' role="alert">
+        <button type="submit" className="btn btn-primary mr-3">提交</button>
+        <button className="btn btn-secondary" onClick={this.props.onCancelSubmit}> 取消 </button>
+        { !this.state.validatePass &&
+          <div className="alert alert-danger mt-5" role="alert">
             {this.state.errorMessage}
           </div>
         }
@@ -119,4 +103,4 @@ class PriceForm extends Component {
   }
 }
 
-export default PriceForm;
+export default PriceForm

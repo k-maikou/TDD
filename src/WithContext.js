@@ -2,10 +2,10 @@ import React from 'react';
 import { AppContext } from './App';
 
 const withContext = (Component) => {
-  return ( props, actions ) => (
+  return ( props ) => (
     <AppContext.Consumer>
-      {({ state }) => {
-        return <Component {...props} data={state} action={actions} />
+      {({ state, actions }) => {
+        return <Component {...props} data={state} actions={actions} />
       }}
     </AppContext.Consumer>
   )
