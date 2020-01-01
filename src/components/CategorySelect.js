@@ -6,24 +6,16 @@ class CategorySelect extends Component {
 
   constructor(props) {
     super(props)
-    console.log(props)
-    this.state = {
-      selectedCategoryId: props.selectCategory && props.selectCategory.id
-    }
   }
 
   selectCategory = (e, categoryItem) => {
-    this.setState({
-      selectedCategoryId: categoryItem.id
-    })
     this.props.onSelectCategory(categoryItem)
-
     e.preventDefault();
   }
 
   render() {
-    const { category } = this.props;
-    const { selectedCategoryId } = this.state;
+    const { category, selectedCategory } = this.props;
+    const selectedCategoryId = selectedCategory && selectedCategory.id
 
     return (
       <div className='category-select-component'>

@@ -50,12 +50,11 @@ class PriceForm extends React.Component {
         errorMessage: '请输入所有必选项'
       })
     }
-    event.preventDefault()
+    event.preventDefault();
   }
 
   render() {
     const { title, price, date } = this.props.item;
-    console.log(this.props.item.id)
     return (
       <form onSubmit={(event) => {this.sumbitForm(event)}} noValidate>
         <div className="form-group">

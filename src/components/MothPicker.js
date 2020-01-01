@@ -61,6 +61,7 @@ class MothPicker extends Component {
     const { isHidden, selectedYear, selectedMonth } = this.state;
     const monthRange = range(12, 1);
     const yearRange = range(9, -4).map(number => number + year);
+    
     return (
       <div className='dropdown moth-picker-component' ref={(ins) => this.ym = ins}>
         <h4>选择月份</h4>
@@ -90,7 +91,8 @@ class MothPicker extends Component {
                     <a href="#" 
                       key={index}
                       onClick={(e) => { this.selectMonth(e, monthNumber) }}
-                      className={monthNumber === selectedMonth ? 'dropdown-item active' : 'dropdown-item'}>
+                      className={monthNumber === selectedMonth ? 'dropdown-item active' : 'dropdown-item'}
+                    >
                       { padLeft(monthNumber) }月
                     </a>
                   ))
