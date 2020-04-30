@@ -40,7 +40,7 @@
     "bootstrap": "^4.4.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "prop-types": "^15.7.2",
     "react-ionicons": "^2.1.6",
     "react-router": "^5.1.2",
